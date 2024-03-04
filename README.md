@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-SVC File Processor is a command-line tool designed to automate the processing of SVC (Supervised Vocabulary Consolidation) files. It provides the ability to extract desired columns from the SVC file, generate a new SVC file with the extracted columns, and randomly select and display 10 English words from the extracted data.
+SVC File Processor is a command-line tool designed to automate the processing of SVC (Supervised Vocabulary Consolidation) files. It provides the ability to extract desired columns from the SVC file, generate a new SVC file with the extracted columns, and randomly select and display n English words from the extracted data.
 
 ## Features
 
