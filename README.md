@@ -1,14 +1,14 @@
-# SVC File Processor
+# Vocabulary Processor
 
-![License](https://img.shields.io/badge/license-MIT-blue)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-SVC File Processor is a command-line tool designed to automate the processing of SVC (Supervised Vocabulary Consolidation) files. It provides the ability to extract desired columns from the SVC file, generate a new SVC file with the extracted columns, and randomly select and display n English words from the extracted data.
+Vocabulary Processor is a program that automates the processing of vocabulary lists in the .svc format. It generates English articles for users to review and study. The program provides features to extract desired columns from a file, filter words and their meanings, generate new English articles, and create a new .svc file with the extracted vocabulary. Additionally, it allows users to randomly select a desired number of English words from the extracted vocabulary and display them.
 
 ## Features
 
-- Extract specific columns from an SVC file.
-- Generate a new SVC file with the extracted columns.
-- Randomly select and display n English words from the extracted data.
+- Automatically extracts desired columns from a file and filters words and their meanings.
+- Generates new English articles and saves them as a new .svc file.
+- Randomly selects a specified number of English words from the extracted vocabulary and displays them.
 
 ## Installation
 
