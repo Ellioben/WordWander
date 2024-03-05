@@ -19,14 +19,14 @@ func ReadCsv(path string, fileName string, outputDic string, row []int) []string
 		logrus.Error("csv文件打开失败！")
 	}
 	defer opencast.Close()
-
+	newFilePath := ""
 	// 创建csv读取接口实例
 	reader := csv.NewReader(opencast)
 	var lines []string
 
 	for {
 		str := []string{outputDic, fileName}
-		newFilePath := strings.Join(str, "/")
+		newFilePath = strings.Join(str, "/")
 
 		line, err := reader.Read()
 		if err == io.EOF {
@@ -52,10 +52,16 @@ func ReadCsv(path string, fileName string, outputDic string, row []int) []string
 
 			WriterCSV(newFilePath, goalString)
 
-			// todo 写入文章
-
 		}
+
 	}
+
+	s := []string{"\n"}
+	s = append(s, "====================================================")
+	s = append(s, "\n")
+	line := "\n" + strings.Join(s, "") + "\n"
+
+	WriterEndCSV(newFilePath, line)
 
 	return lines
 }
@@ -80,4 +86,38 @@ func WriterCSV(path string, str []string) {
 	}
 	WriterCsv.Flush() //刷新，不刷新是无法写入的
 	logrus.Debug("数据写入成功...")
+}
+
+func WriterEndCSV(path string, str string) {
+
+	//OpenFile读取文件，不存在时则创建，使用追加模式
+
+	file, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		logrus.Error("无法打开文件：%v", err)
+	}
+	defer file.Close()
+
+	_, err = file.WriteString(str)
+	if err != nil {
+		logrus.Error("写入文章失败：%v", err)
+	}
+}
+
+func WriteArticle2CSV(path, fileName, content string) {
+	str := []string{path, fileName}
+	newFilePath := strings.Join(str, "/")
+
+	file, err := os.OpenFile(newFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		logrus.Error("无法打开文件：%v", err)
+	}
+	defer file.Close()
+
+	_, err = file.WriteString(content)
+	if err != nil {
+		logrus.Error("写入文章失败：%v", err)
+	}
+
+	logrus.Infof("文章生成成功！", newFilePath)
 }
