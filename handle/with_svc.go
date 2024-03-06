@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func ReadCsv(path string, fileName string, outputDic string, row []int) []string {
+func ReadCsv(path string, fileName string, outputDic string, content []string) []string {
 	var str = []string{path, fileName}
 	filePath := strings.Join(str, "/")
 
@@ -24,9 +24,42 @@ func ReadCsv(path string, fileName string, outputDic string, row []int) []string
 	reader := csv.NewReader(opencast)
 	var lines []string
 
+	newfile := []string{outputDic, fileName}
+	newFilePath = strings.Join(newfile, "/")
+
+	line, err := reader.Read()
+	if err == io.EOF {
+		return []string{}
+	} else if err != nil {
+		fmt.Println("读取文件Error: ", err)
+		return []string{}
+	}
+
+	// 输出提取的数据到新文件
+	if line[0] != "" {
+
+		WriterCSV(newFilePath, content)
+
+	}
+
+	return lines
+}
+
+func GetWordFromFile(path string, fileName string, row []int) []string {
+	var str = []string{path, fileName}
+	filePath := strings.Join(str, "/")
+
+	// 打开文件(只读模式)，创建io.read接口实例
+	opencast, err := os.Open(filePath)
+	if err != nil {
+		logrus.Error("csv文件打开失败！")
+	}
+	defer opencast.Close()
+	// 创建csv读取接口实例
+	reader := csv.NewReader(opencast)
+	var lines []string
+
 	for {
-		str := []string{outputDic, fileName}
-		newFilePath = strings.Join(str, "/")
 
 		line, err := reader.Read()
 		if err == io.EOF {
@@ -38,8 +71,8 @@ func ReadCsv(path string, fileName string, outputDic string, row []int) []string
 
 		// 输出提取的数据到新文件
 		if line[0] != "" {
-			var goalString []string
 			lines = append(lines, line[row[0]])
+			var goalString []string
 
 			for i := 0; i < len(row); i++ {
 
@@ -47,23 +80,20 @@ func ReadCsv(path string, fileName string, outputDic string, row []int) []string
 
 				// generator newfile
 				goalString = append(goalString, line[row[i]])
+				// todo 这里需要one by one 写入
 
 			}
-
-			WriterCSV(newFilePath, goalString)
-
 		}
-
 	}
+	return lines
+}
 
+func addLineBreak() string {
 	s := []string{"\n"}
 	s = append(s, "====================================================")
 	s = append(s, "\n")
 	line := "\n" + strings.Join(s, "") + "\n"
-
-	WriterEndCSV(newFilePath, line)
-
-	return lines
+	return line
 }
 
 func WriterCSV(path string, str []string) {
@@ -107,6 +137,7 @@ func WriterEndCSV(path string, str string) {
 func WriteArticle2CSV(path, fileName, content string) {
 	str := []string{path, fileName}
 	newFilePath := strings.Join(str, "/")
+	logrus.Infof("生成新文章--->%s", newFilePath)
 
 	file, err := os.OpenFile(newFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
@@ -118,6 +149,4 @@ func WriteArticle2CSV(path, fileName, content string) {
 	if err != nil {
 		logrus.Error("写入文章失败：%v", err)
 	}
-
-	logrus.Infof("文章生成成功！", newFilePath)
 }
