@@ -29,13 +29,14 @@ func main() {
 
 	for _, file := range files {
 
-		// todo 先获取到当前file的单词，写入新文件
-		words := handle.GetWordFromFileAndWrite2CSV(readDic, file, outputDic, patchRow, allWord)
 		continueinfo := declareUpdate(file)
 
 		if continueinfo {
 			continue
 		}
+
+		// todo 先获取到当前file的单词，写入新文件
+		words := handle.GetWordFromFileAndWrite2CSV(readDic, file, outputDic, patchRow, allWord)
 		// todo 当前单词和存起来的所有单词差集，
 		// 单词差级
 		words = handle.UniqueResource(words, allWord)
@@ -53,12 +54,27 @@ func main() {
 
 	} else {
 
-		logrus.Infof("一共%v\n", len(allWord))
+		logrus.Infof("一共%v个单词\n", len(allWord))
 		randomWord := handle.RandomWord(allWord)
-		logrus.Infof("随机单词：%s", randomWord)
+		logrus.Infof("随机单词：%s", optimizeSlice(randomWord))
 	}
 
 	//filePath, _ := fmt.Println("%s%s", path, fileName)
+}
+
+func optimizeSlice(randomWord []string) []string {
+	// 创建一个新的切片，用于存储非空元素
+	filteredSlice := make([]string, 0)
+
+	// 遍历切片，将非空元素添加到新的切片中
+	for _, s := range randomWord {
+		if s != "" {
+			filteredSlice = append(filteredSlice, s)
+		}
+	}
+
+	// 输出处理后的结果
+	return filteredSlice
 }
 
 func declareUpdate(file string) bool {
