@@ -45,7 +45,7 @@ func ReadCsv(path string, fileName string, outputDic string, content []string) [
 	return lines
 }
 
-func GetWordFromFile(path string, fileName string, row []int) []string {
+func GetWordFromFileAndWrite2CSV(path string, fileName string, outputDic string, row []int, allWord []string) []string {
 	var str = []string{path, fileName}
 	filePath := strings.Join(str, "/")
 
@@ -58,8 +58,11 @@ func GetWordFromFile(path string, fileName string, row []int) []string {
 	// 创建csv读取接口实例
 	reader := csv.NewReader(opencast)
 	var lines []string
+	newFilePath := ""
 
 	for {
+		str := []string{outputDic, fileName}
+		newFilePath = strings.Join(str, "/")
 
 		line, err := reader.Read()
 		if err == io.EOF {
@@ -69,22 +72,32 @@ func GetWordFromFile(path string, fileName string, row []int) []string {
 			return []string{}
 		}
 
-		// 输出提取的数据到新文件
 		if line[0] != "" {
 			lines = append(lines, line[row[0]])
-			var goalString []string
-
-			for i := 0; i < len(row); i++ {
-
-				// catch the word to print
-
-				// generator newfile
-				goalString = append(goalString, line[row[i]])
-				// todo 这里需要one by one 写入
-
-			}
 		}
+
+		// todo 筛选word
+		lines = UniqueResource(lines, allWord)
+
+		// 输出提取的数据到新文件
+		var goalString []string
+		for _, l := range lines {
+			if l == line[0] {
+				for i := 0; i < len(row); i++ {
+					// generator newfile
+					goalString = append(goalString, line[row[i]])
+
+					// todo 筛选word
+
+				}
+				WriterCSV(newFilePath, goalString)
+			}
+
+		}
+
 	}
+
+	WriterEndCSV(newFilePath, addLineBreak())
 	return lines
 }
 
