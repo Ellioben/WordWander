@@ -45,10 +45,4 @@ go build -o wordwander main.go
 
 3. View the generated English articles and other result files in the `output` folder within the project directory.
 
-## Example
-
-Here's an example of using Vocabulary Processor to generate an English article:
-
-```shell
-./vocab-processor 
-```
+# AI platform：[智谱AI开放平台](https://open.bigmodel.cn/dev/api#overview)
