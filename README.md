@@ -22,15 +22,15 @@ git@github.com:Ellioben/wordwander.git
 3. Navigate to the project directory.
 
 ```shell
-cd vocabulary-processor
+cd wordwander
 ```
 
-4. Place the input .svc file in the `input` folder within the project directory.
+4. Place the input .svc file in the `collection` folder within the project directory.
 
 5. Compile the source code to generate the binary file.
 
 ```shell
-go build -o wordwander main.go
+go build  main.go
 ```
 
 ## Usage
